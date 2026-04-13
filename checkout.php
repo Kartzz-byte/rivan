@@ -1,0 +1,163 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+$img = $_GET['img'] ?? 'default.png';
+$game = $_GET['game'] ?? "Unknown Game";
+$price = $_GET['price'] ?? 0;
+?>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Checkout</title>
+
+<style>
+body {
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial;
+    color:white;
+
+    background: linear-gradient(-45deg, #0f172a, #1e3a8a, #0f172a, #020617);
+    background-size: 400% 400%;
+    animation: bg 10s ease infinite;
+}
+
+@keyframes bg {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.box {
+    width:320px;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+
+    border:1px solid rgba(255,255,255,0.2);
+    box-shadow:0 0 20px #00ffcc;
+}
+.game-img {
+    width:100%;
+    height:160px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-bottom:15px;
+
+    box-shadow:
+        0 0 10px #00ffcc,
+        0 0 20px #00ffcc;
+}
+.game-img:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+h2 {
+    color:#00ffcc;
+    text-shadow:0 0 10px #00ffcc;
+}
+
+.info {
+    margin:10px 0;
+}
+
+.price {
+    font-size:22px;
+    color:#00ffcc;
+    margin:10px 0;
+}
+
+/* SELECT PAYMENT */
+select {
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    margin-top:10px;
+}
+
+/* BUTTON */
+.btn {
+    display:block;
+    margin-top:15px;
+    padding:10px;
+    background:#00ffcc;
+    color:black;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.btn:hover {
+    background:#00cc99;
+}
+
+.back {
+    display:block;
+    margin-top:10px;
+    padding:10px;
+    background:transparent;
+    color:#00ffcc;
+    border:2px solid #00ffcc;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+    text-align:center;
+
+    box-shadow:0 0 10px #00ffcc;
+    transition:0.3s;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+<img src="images/<?php echo htmlspecialchars($img); ?>" class="game-img">
+    <h2>Checkout</h2>
+
+    <div class="info">
+        Game: <b><?php echo htmlspecialchars($game); ?></b>
+    </div>
+
+    <div class="price">
+        Rp <?php echo number_format($price); ?>
+    </div>
+
+<form action="success.php" method="GET">
+
+    <input type="hidden" name="game" value="<?php echo htmlspecialchars($game); ?>">
+    <input type="hidden" name="price" value="<?php echo htmlspecialchars($price); ?>">
+
+    <select name="method" required>
+        <option value="">Pilih Pembayaran</option>
+        <option value="DANA">DANA</option>
+        <option value="OVO">OVO</option>
+        <option value="GoPay">GoPay</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+    </select>
+
+    <button class="btn" type="submit">Bayar Sekarang</button>
+
+</form>
+    <a class="back" href="home.php">Kembali</a>
+
+</div>
+
+</body>
+</html>
